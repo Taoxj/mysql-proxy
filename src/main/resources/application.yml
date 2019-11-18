@@ -1,0 +1,14 @@
+server:
+  port: 8001
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  master:
+    url: jdbc:mysql://127.0.0.1:3307/test
+    username: root
+    password: 123456
+  slave:
+    url: jdbc:mysql://127.0.0.1:3308/test
+    username: root
+    password: 123456
