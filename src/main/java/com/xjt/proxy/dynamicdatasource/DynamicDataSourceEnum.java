@@ -1,13 +1,11 @@
 package com.xjt.proxy.dynamicdatasource;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
  * @author luoping
  */
 @Getter
-@AllArgsConstructor
 public enum DynamicDataSourceEnum {
     /**
      * 主库
@@ -18,5 +16,9 @@ public enum DynamicDataSourceEnum {
      */
     SLAVE("slave");
 
-    private final String dataSourceName;
+    private String dataSourceName;
+
+    DynamicDataSourceEnum(String dataSourceName) {
+        this.dataSourceName = dataSourceName;
+    }
 }

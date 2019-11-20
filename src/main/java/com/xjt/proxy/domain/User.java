@@ -15,7 +15,7 @@ import lombok.Data;
  */
 @Data
 @Entity
-@Table(name = "db_bargain_activity")
+@Table(name = "user")
 public class User {
     @Id
     @Column(name = "user_id")

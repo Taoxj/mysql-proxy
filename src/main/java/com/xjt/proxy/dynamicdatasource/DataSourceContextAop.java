@@ -29,7 +29,7 @@ public class DataSourceContextAop {
             DataSourceSelector dataSourceImport = method.getAnnotation(DataSourceSelector.class);
             clear = dataSourceImport.clear();
             DataSourceContextHolder.set(dataSourceImport.value().getDataSourceName());
-            log.debug("========数据源切换至：{}", dataSourceImport.value().getDataSourceName());
+            log.info("========数据源切换至：{}", dataSourceImport.value().getDataSourceName());
             return pjp.proceed();
         } finally {
             if (clear) {
