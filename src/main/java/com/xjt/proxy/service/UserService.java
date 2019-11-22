@@ -1,6 +1,5 @@
 package com.xjt.proxy.service;
 
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +19,6 @@ public class UserService {
 
     @Autowired
     private UserMapper userMapper;
-
-    @Autowired
-    private ReadService readService;
 
     @DataSourceSelector(value = DynamicDataSourceEnum.SLAVE)
     public List<User> listUser() {
