@@ -26,7 +26,7 @@ public class UserController {
     }
 
     @RequestMapping("/update")
-    public User update() {
+    public int update() {
         return userService.update();
     }
 }

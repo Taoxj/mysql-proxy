@@ -1,5 +1,6 @@
 package com.xjt.proxy.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,20 +21,20 @@ public class UserService {
     @Autowired
     private UserMapper userMapper;
 
-    @DataSourceSelector(value = DynamicDataSourceEnum.MASTER)
+    @Autowired
+    private ReadService readService;
+
+    @DataSourceSelector(value = DynamicDataSourceEnum.SLAVE)
     public List<User> listUser() {
         List<User> users = userMapper.selectAll();
         return users;
     }
 
-    @DataSourceSelector(value = DynamicDataSourceEnum.SLAVE)
-    public User update() {
+    @DataSourceSelector(value = DynamicDataSourceEnum.MASTER)
+    public int update() {
         User user = new User();
-        user.setUserId(Long.parseLong("1196978513958141953"));
-        user.setUserName("修改后的名字1");
-        if (userMapper.updateByPrimaryKeySelective(user) > 0) {
-            return userMapper.selectByPrimaryKey(user);
-        }
-        return null;
+        user.setUserId(Long.parseLong("1196978513958141952"));
+        user.setUserName("修改后的名字2");
+        return userMapper.updateByPrimaryKeySelective(user);
     }
 }

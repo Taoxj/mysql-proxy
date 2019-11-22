@@ -10,7 +10,6 @@ import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,7 +32,7 @@ import tk.mybatis.spring.annotation.MapperScan;
 @MapperScan(basePackages = "com.xjt.proxy.mapper", sqlSessionTemplateRef = "sqlTemplate")
 public class DataSourceConfig {
     /**
-     * 骑士商城主库
+     * 主库
      */
     @Bean
     @ConfigurationProperties(prefix = "spring.datasource.master")
@@ -42,12 +41,9 @@ public class DataSourceConfig {
     }
 
     /**
-     * <p>
-     * 骑士商城从库
-     * </p>
+     * 从库
      */
     @Bean
-    @ConditionalOnProperty(prefix = "spring.datasource", name = "slave", matchIfMissing = true)
     @ConfigurationProperties(prefix = "spring.datasource.slave")
     public DataSource slaveDb() {
         return DruidDataSourceBuilder.create().build();
