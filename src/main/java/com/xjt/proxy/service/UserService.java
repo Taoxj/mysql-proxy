@@ -37,4 +37,11 @@ public class UserService {
         user.setUserName("修改后的名字2");
         return userMapper.updateByPrimaryKeySelective(user);
     }
+
+    @DataSourceSelector(value = DynamicDataSourceEnum.SLAVE)
+    public User find() {
+        User user = new User();
+        user.setUserId(Long.parseLong("1196978513958141952"));
+        return userMapper.selectByPrimaryKey(user);
+    }
 }
