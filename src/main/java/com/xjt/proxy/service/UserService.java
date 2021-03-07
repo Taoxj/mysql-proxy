@@ -1,5 +1,6 @@
 package com.xjt.proxy.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,8 @@ import com.xjt.proxy.domain.User;
 import com.xjt.proxy.dynamicdatasource.DataSourceSelector;
 import com.xjt.proxy.dynamicdatasource.DynamicDataSourceEnum;
 import com.xjt.proxy.mapper.UserMapper;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
 /**
  * @author kevin
@@ -20,24 +23,18 @@ public class UserService {
     @Autowired
     private UserMapper userMapper;
 
-    @DataSourceSelector(value = DynamicDataSourceEnum.SLAVE)
-    public List<User> listUser() {
-        List<User> users = userMapper.selectAll();
-        return users;
-    }
-
     @DataSourceSelector(value = DynamicDataSourceEnum.MASTER)
-    public int update() {
+    public int update(Long userId) {
         User user = new User();
-        user.setUserId(Long.parseLong("1196978513958141952"));
-        user.setUserName("修改后的名字2");
+        user.setUserId(userId);
+        user.setUserName("老薛");
         return userMapper.updateByPrimaryKeySelective(user);
     }
 
     @DataSourceSelector(value = DynamicDataSourceEnum.SLAVE)
-    public User find() {
+    public User find(Long userId) {
         User user = new User();
-        user.setUserId(Long.parseLong("1196978513958141952"));
+        user.setUserId(userId);
         return userMapper.selectByPrimaryKey(user);
     }
 }

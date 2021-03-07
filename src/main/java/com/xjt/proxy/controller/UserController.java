@@ -20,13 +20,8 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping("/list")
-    public List<User> userList() {
-        return userService.listUser();
-    }
-
-    @RequestMapping("/update")
-    public int update() {
-        return userService.update();
-    }
+//    @RequestMapping("/update")
+//    public int update() {
+//        return userService.update();
+//    }
 }

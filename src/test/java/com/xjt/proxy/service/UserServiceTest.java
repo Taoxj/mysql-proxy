@@ -22,19 +22,19 @@ class UserServiceTest {
     UserService userService;
 
     @Test
-    void listUser() {
-        List<User> users = userService.listUser();
-        for (User user : users) {
-            System.out.println(user.getUserId());
-            System.out.println(user.getUserName());
-            System.out.println(user.getUserPhone());
-        }
+    void find() {
+        User user = userService.find(1196978513958141952L);
+        System.out.println("id:" + user.getUserId());
+        System.out.println("name:" + user.getUserName());
+        System.out.println("phone:" + user.getUserPhone());
     }
 
     @Test
     void update() {
-        userService.update();
-        User user = userService.find();
+        Long userId = 1196978513958141952L;
+        userService.update(userId);
+        User user = userService.find(userId);
         System.out.println(user.getUserName());
     }
+
 }

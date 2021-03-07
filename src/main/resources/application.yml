@@ -8,13 +8,13 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
     master:
-      url: jdbc:mysql://127.0.0.1:3307/user?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false&useSSL=false&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true
+      url: jdbc:mysql://127.0.0.1:3307/test?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false&useSSL=false&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true
       username: root
-      password:
+      password: 123456
     slave:
-      url: jdbc:mysql://127.0.0.1:3308/user?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false&useSSL=false&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true
+      url: jdbc:mysql://127.0.0.1:3308/test?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false&useSSL=false&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true
       username: root
-      password:
+      password: 123456
   freemarker:
     template-loader-path: classpath:/templates
     cache: false
@@ -25,3 +25,23 @@ spring:
     expose-session-attributes: true
     request-context-attribute: request
     suffix: .ftl
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password:
+    database: 11
+    #    pool:
+    #      max-active: 100
+    #      max-wait: -1
+    #      max-idle: 20
+    #      min-idle: 10
+    lettuce:
+      pool:
+        # 最大连接数
+        max-active: 20
+        # 最大能够保持idel状态的连接数
+        max-idle: 20
+        # 最小能够保持idel状态的连接数
+        min-idle: 10
+        # 当池内没有返回对象时，最大等待时间
+        max-wait: 5000ms
