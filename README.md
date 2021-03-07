@@ -3,7 +3,11 @@
 
 ### 前言
 
-入职新公司到现在也有一个月了，完成了手头的工作，前几天终于有时间研究下公司旧项目的代码。在研究代码的过程中，发现项目里用到了Spring Aop来实现数据库的读写分离，本着自己爱学习(我自己都不信...)的性格，决定写个实例工程来实现spring aop读写分离的效果。
+相信有经验的同学都清楚，当db的读写量过高时，我们会备份一份或多份的从库用于做数据的读取，然后主库就主要承担写入的功能（也有读取需要，但压力不大），当db分好主从库后，我们还需要在项目实现自动连接主从库，达到读写分离的效果。实现读写分离并不困难，只要在数据库连接池手动控制好对应的db服务地址即可，但那样就会侵入业务代码，而且一个项目操作数据库的地方可能很多，如果都手动控制的话无疑会是很大的工作量，对此，我们有必要改造出一套方便的工具。
+
+以Java语言来说，如今大部分的项目都是基于Spring Boot框架来搭建项目架构的，结合Spring本身自带的AOP工具，我们可以很容易就构建能实现读写分离效果的注解类，用注解的话可以达到对业务代码无入侵的效果，而且使用上也比较方便。
+
+下面就简单带大家写个demo。
 
 ### 环境部署
 
@@ -300,30 +304,24 @@ public class UserService {
     @Autowired
     private UserMapper userMapper;
 
-    @DataSourceSelector(value = DynamicDataSourceEnum.SLAVE)
-    public List<User> listUser() {
-        List<User> users = userMapper.selectAll();
-        return users;
-    }
-
     @DataSourceSelector(value = DynamicDataSourceEnum.MASTER)
-    public int update() {
+    public int update(Long userId) {
         User user = new User();
-        user.setUserId(Long.parseLong("1196978513958141952"));
-        user.setUserName("修改后的名字2");
+        user.setUserId(userId);
+        user.setUserName("老薛");
         return userMapper.updateByPrimaryKeySelective(user);
     }
 
     @DataSourceSelector(value = DynamicDataSourceEnum.SLAVE)
-    public User find() {
+    public User find(Long userId) {
         User user = new User();
-        user.setUserId(Long.parseLong("1196978513958141952"));
+        user.setUserId(userId);
         return userMapper.selectByPrimaryKey(user);
     }
 }
 ```
 
-根据方法上的注解可以看出，读的方法走从库，更新的方法走主库，更新的对象是userId为`1196978513958141953` 的数据，
+根据方法上的注解可以看出，读的方法走从库，更新的方法走主库，更新的对象是userId为`1196978513958141952` 的数据，
 
 然后我们写个测试类测试下是否能达到效果，
 
@@ -336,18 +334,18 @@ class UserServiceTest {
     UserService userService;
 
     @Test
-    void listUser() {
-        List<User> users = userService.listUser();
-        for (User user : users) {
-            System.out.println(user.getUserId());
-            System.out.println(user.getUserName());
-            System.out.println(user.getUserPhone());
-        }
+    void find() {
+        User user = userService.find(1196978513958141952L);
+        System.out.println("id:" + user.getUserId());
+        System.out.println("name:" + user.getUserName());
+        System.out.println("phone:" + user.getUserPhone());
     }
+
     @Test
     void update() {
-        userService.update();
-        User user = userService.find();
+        Long userId = 1196978513958141952L;
+        userService.update(userId);
+        User user = userService.find(userId);
         System.out.println(user.getUserName());
     }
 }
@@ -357,11 +355,11 @@ class UserServiceTest {
 
 1、读取方法
 
-![](https://img2018.cnblogs.com/blog/1478697/201911/1478697-20191126155931637-570944204.png)
+![](https://img2020.cnblogs.com/blog/1478697/202103/1478697-20210308011010913-474866408.png)
 
 2、更新方法
 
-![](https://img2018.cnblogs.com/blog/1478697/201911/1478697-20191126155943958-1951310412.png)
+![](https://img2020.cnblogs.com/blog/1478697/202103/1478697-20210308011019315-236391720.png)
 
 执行之后，比对数据库就可以发现主从库都修改了数据，说明我们的读写分离是成功的。当然，更新方法可以指向从库，这样一来就只会修改到从库的数据，而不会涉及到主库。
 
