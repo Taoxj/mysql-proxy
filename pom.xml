@@ -37,7 +37,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.16</version>
+            <version>8.0.28</version>
         </dependency>
         <!-- 动态数据源 所需依赖 ### start-->
         <dependency>
